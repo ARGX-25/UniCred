@@ -4,44 +4,68 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.unicred.ui.screens.LoginScreen
+import com.example.unicred.ui.screens.recruiter.RecruiterDashboard
+import com.example.unicred.ui.screens.student.StudentDashboard
+import com.example.unicred.ui.screens.university.UniversityDashboard
 import com.example.unicred.ui.theme.UniCredTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             UniCredTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                UniCredRoot()
             }
         }
     }
 }
 
+/*
+This composable root makes sure that the navigation happens one way after selection is made between
+Student,Recruiter and University.
+*/
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+private fun UniCredRoot() {
+    val navController = rememberNavController()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    UniCredTheme {
-        Greeting("Android")
+    NavHost(
+        navController = navController,
+        startDestination = "login"
+    ) {
+        composable("login") {
+            // Based on what state variable we received in the onLoginSuccess variable we will be take accordingly to selected screens.
+            LoginScreen { role ->
+                val destination = when (role) {
+                    "Student" -> "student_dashboard"
+                    "Recruiter" -> "recruiter_dashboard"
+                    "University" -> "university_dashboard"
+                    else -> "login"
+                }
+                //This line makes sure that there is no going back after the user has logged in.
+                navController.navigate(destination) {
+                    popUpTo("login") { inclusive = true }
+                }
+            }
+        }
+
+
+        composable("student_dashboard") {
+            StudentDashboard()
+        }
+
+        composable("university_dashboard") {
+            UniversityDashboard()
+        }
+
+        composable("recruiter_dashboard") {
+            RecruiterDashboard()
+        }
     }
 }
