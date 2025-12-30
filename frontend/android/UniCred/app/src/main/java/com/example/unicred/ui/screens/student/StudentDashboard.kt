@@ -18,6 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.compose.runtime.getValue
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.unicred.ui.theme.bgBlue
 import com.example.unicred.ui.theme.primaryBlue
 import com.example.unicred.R
@@ -30,9 +34,18 @@ import com.example.unicred.ui.theme.secondaryBlue
 
 
 @Composable
-fun StudentDashboard() {
+fun StudentDashboard(
+    navController: NavController
+) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+
     Scaffold(
-        bottomBar = { StudentNavBar() }
+        bottomBar = { StudentNavBar(
+            navController = navController,
+            currentRoute = currentRoute ?: ""
+        ) }
     ) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -65,6 +78,8 @@ fun StudentDashboard() {
 @Composable
 private fun DashboardHeader() {
     Column {
+        Text("Dashboard", fontSize = 18.sp, color = Color.White)
+        Spacer(modifier = Modifier.height(12.dp))
         Text("Welcome back, Student One!", fontSize = 22.sp, color = Color.White)
         Spacer(modifier = Modifier.height(4.dp))
         Text(
@@ -272,43 +287,61 @@ private fun QuickActionsSection() {
 }
 
 @Composable
-fun StudentNavBar() {
+fun StudentNavBar(
+    navController: NavController,
+    currentRoute: String
+) {
     NavigationBar(
         containerColor = primaryBlue
     ) {
         NavigationBarItem(
-            selected = true,
-            onClick = { },
+            selected = currentRoute == "student_dashboard",
+            onClick = { navController.navigate("student_dashboard") },
             icon = {
                 Icon(
-                painter = painterResource(R.drawable.home),
-                contentDescription = null,
-                tint = secondaryBlue
-            )},
-            label = { Text("Dashboard", color = Color.White) }
+                    painter = painterResource(R.drawable.home),
+                    contentDescription = null,
+                    tint = if (currentRoute == "student_dashboard") secondaryBlue else grey
+                )
+            },
+            label = { Text("Dashboard", color = Color.White) },
+            colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color.Transparent
+            )
         )
+
         NavigationBarItem(
-            selected = false,
-            onClick = { },
+            selected = currentRoute == "student_credentials",
+            onClick = { /* navigate later */ },
             icon = {
-                    Icon(
-                        painter = painterResource(R.drawable.docs),
-                        contentDescription = null,
-                        tint = grey
-            )},
-            label = { Text("My Credentials", color = Color.White) }
+                Icon(
+                    painter = painterResource(R.drawable.docs),
+                    contentDescription = null,
+                    tint = if (currentRoute == "student_credentials") secondaryBlue else grey
+                )
+            },
+            label = { Text("My Credentials", color = Color.White) },
+            colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color.Transparent
+            )
         )
+
         NavigationBarItem(
-            selected = false,
-            onClick = { },
+            selected = currentRoute == "student_profile",
+            onClick = { navController.navigate("student_profile") },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.profile),
                     contentDescription = null,
-                    tint = grey
-            )},
-            label = { Text("Profile", color = Color.White) }
+                    tint = if (currentRoute == "student_profile") secondaryBlue else grey
+                )
+            },
+            label = { Text("Profile", color = Color.White) },
+            colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color.Transparent
+            )
         )
     }
 }
+
 

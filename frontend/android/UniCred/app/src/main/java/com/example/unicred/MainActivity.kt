@@ -10,8 +10,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.unicred.ui.screens.LoginScreen
 import com.example.unicred.ui.screens.recruiter.RecruiterDashboard
+import com.example.unicred.ui.screens.recruiter.RecruiterSettings
+import com.example.unicred.ui.screens.student.ProfileScreen
 import com.example.unicred.ui.screens.student.StudentDashboard
+import com.example.unicred.ui.screens.university.CredentialManagement
+import com.example.unicred.ui.screens.university.StudentDirectory
 import com.example.unicred.ui.screens.university.UniversityDashboard
+import com.example.unicred.ui.screens.university.UniversitySettings
+
 import com.example.unicred.ui.theme.UniCredTheme
 
 class MainActivity : ComponentActivity() {
@@ -57,15 +63,37 @@ private fun UniCredRoot() {
 
 
         composable("student_dashboard") {
-            StudentDashboard()
+            StudentDashboard(navController)
+        }
+
+        composable("student_profile"){
+            ProfileScreen(navController)
         }
 
         composable("university_dashboard") {
-            UniversityDashboard()
+            UniversityDashboard(navController)
+        }
+
+        composable("credential_management"){
+            CredentialManagement(navController)
+        }
+
+        composable("student_directory"){
+            StudentDirectory(navController)
+        }
+
+        composable("university_settings"){
+            UniversitySettings(navController)
         }
 
         composable("recruiter_dashboard") {
-            RecruiterDashboard()
+            RecruiterDashboard(navController)
+        }
+
+
+
+        composable("recruiter_settings"){
+            RecruiterSettings(navController)
         }
     }
 }
