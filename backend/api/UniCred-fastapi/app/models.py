@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey, Date
 from sqlalchemy.sql import func
 
 from app.database import Base
@@ -30,7 +30,11 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
+    full_name = Column(String, nullable=False)
+
     email = Column(String, nullable=False, unique=True, index=True)
+    valid_id = Column(String, nullable=False, unique=True)
+
     password_hash = Column(String, nullable=False)
 
     role = Column(
@@ -105,6 +109,8 @@ class Credential(Base):
 
     hash = Column(String, nullable=False, unique=True)
 
+    graduation_date = Column(Date, nullable=False)
+
     status = Column(
         Enum(CredentialStatus),
         nullable=False,
@@ -117,7 +123,6 @@ class Credential(Base):
     )
 
     revoked_at = Column(DateTime(timezone=True), nullable=True)
-
 
 class Verification(Base):
     __tablename__ = "verifications"
