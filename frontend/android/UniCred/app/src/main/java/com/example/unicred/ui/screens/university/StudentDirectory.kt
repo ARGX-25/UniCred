@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.unicred.R
+import com.example.unicred.ui.screens.PopupDropdownField
+import com.example.unicred.ui.screens.PopupTextField
+import com.example.unicred.ui.screens.UniversityPopup
 import com.example.unicred.ui.theme.*
 
 /* ----------------------------- ENTRY POINT ----------------------------- */
@@ -33,8 +36,18 @@ fun StudentDirectory(
 ) {
     var query by remember { mutableStateOf("") }
 
+    var showAddStudentPopup by remember { mutableStateOf(false) }
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: ""
+
+    var fullName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var studentId by remember { mutableStateOf("") }
+    var program by remember { mutableStateOf("Computer Science") }
+    var phone by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+
 
     Scaffold(
         bottomBar = {
@@ -64,10 +77,77 @@ fun StudentDirectory(
                 )
             }
 
-            item { AddStudentButton() }
+            item { AddStudentButton(onClick = { showAddStudentPopup = true }) }
 
             item { StudentsListSection() }
         }
+
+        if (showAddStudentPopup) {
+
+
+
+            UniversityPopup(
+                title = "Add New Student",
+                confirmText = "Add Student",
+                onDismiss = { showAddStudentPopup = false },
+                onConfirm = {
+                    // TODO: ViewModel call later
+                    showAddStudentPopup = false
+                }
+            ) {
+                PopupTextField(
+                    label = "Full Name",
+                    value = fullName,
+                    onValueChange = { fullName = it },
+                    placeholder = "Enter full name",
+                    required = true
+                )
+
+                PopupTextField(
+                    label = "Email",
+                    value = email,
+                    onValueChange = { email = it },
+                    placeholder = "Enter email address",
+                    required = true
+                )
+
+                PopupTextField(
+                    label = "Student ID",
+                    value = studentId,
+                    onValueChange = { studentId = it },
+                    placeholder = "Enter student ID",
+                    required = true
+                )
+
+                PopupDropdownField(
+                    label = "Program",
+                    options = listOf(
+                        "Computer Science",
+                        "Electronics",
+                        "Mechanical",
+                        "Civil"
+                    ),
+                    selected = program,
+                    onSelect = { program = it },
+                    required = true
+                )
+
+                PopupTextField(
+                    label = "Phone Number",
+                    value = phone,
+                    onValueChange = { phone = it },
+                    placeholder = "Enter phone number"
+                )
+
+                PopupTextField(
+                    label = "Address",
+                    value = address,
+                    onValueChange = { address = it },
+                    placeholder = "Enter address"
+                )
+            }
+        }
+
     }
 }
 
@@ -114,7 +194,8 @@ private fun StatCard(stat: SimpleStatItem) {
         colors = CardDefaults.cardColors(primaryBlue)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(stat.value, fontSize = 22.sp, color = Color.White)
@@ -197,12 +278,14 @@ private fun StudentSearchAndFilter(
 /* ----------------------------- ADD STUDENT ----------------------------- */
 
 @Composable
-private fun AddStudentButton() {
+private fun AddStudentButton(
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(52.dp)
-            .clickable { },
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(secondaryBlue)
     ) {

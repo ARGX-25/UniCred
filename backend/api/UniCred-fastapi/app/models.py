@@ -79,13 +79,17 @@ class Student(Base):
         nullable=False
     )
 
-    student_identifier = Column(String, nullable=False)
+    student_id = Column(String, nullable=False, index=True)
     program = Column(String, nullable=False)
+
+    phone_number = Column(String, nullable=False)
+    address = Column(String, nullable=False)
 
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now()
     )
+
 
 class Credential(Base):
     __tablename__ = "credentials"

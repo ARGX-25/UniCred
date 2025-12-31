@@ -50,6 +50,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.unicred.R
+import com.example.unicred.ui.screens.PopupDropdownField
+import com.example.unicred.ui.screens.PopupTextField
+import com.example.unicred.ui.screens.UniversityPopup
 import com.example.unicred.ui.theme.bgBlue
 import com.example.unicred.ui.theme.blue
 import com.example.unicred.ui.theme.green
@@ -66,8 +69,16 @@ fun CredentialManagement(
 ) {
     var query by remember { mutableStateOf("") }
 
+    var showIssueCredentialPopup by remember { mutableStateOf(false) }
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: ""
+
+    var title by remember { mutableStateOf("") }
+    var type by remember { mutableStateOf("Bachelor") }
+    var studentId by remember { mutableStateOf("") }
+    var studentName by remember { mutableStateOf("") }
+    var graduationDate by remember { mutableStateOf("") }
 
     Scaffold(
         bottomBar = {
@@ -98,7 +109,9 @@ fun CredentialManagement(
             }
 
             item {
-                IssueCredentialButton()
+                IssueCredentialButton(
+                    onClick = { showIssueCredentialPopup = true }
+                )
             }
 
             item {
@@ -106,6 +119,58 @@ fun CredentialManagement(
             }
         }
     }
+
+    if (showIssueCredentialPopup) {
+
+        UniversityPopup(
+            title = "Issue New Credential",
+            confirmText = "Issue Credential",
+            onDismiss = { showIssueCredentialPopup = false },
+            onConfirm = {
+                // TODO: send data to ViewModel later
+                showIssueCredentialPopup = false
+            }
+        ) {
+            PopupTextField(
+                label = "Credential Title",
+                value = title,
+                onValueChange = { title = it },
+                placeholder = "Enter credential title",
+                required = true
+            )
+
+            PopupDropdownField(
+                label = "Credential Type",
+                options = listOf("Bachelor", "Master", "Diploma", "Certificate"),
+                selected = type,
+                onSelect = { type = it },
+                required = true
+            )
+
+            PopupTextField(
+                label = "Student ID",
+                value = studentId,
+                onValueChange = { studentId = it },
+                placeholder = "e.g. STU001",
+                required = true
+            )
+
+            PopupTextField(
+                label = "Student Name",
+                value = studentName,
+                onValueChange = { studentName = it },
+                placeholder = "e.g. John Doe"
+            )
+
+            PopupTextField(
+                label = "Graduation Date",
+                value = graduationDate,
+                onValueChange = { graduationDate = it },
+                placeholder = "YYYY-MM-DD"
+            )
+        }
+    }
+
 }
 
 @Composable
@@ -272,12 +337,12 @@ private fun CredentialSearchAndFilter(
 
 
 @Composable
-private fun IssueCredentialButton() {
+private fun IssueCredentialButton(onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(52.dp)
-            .clickable { /* open issue dialog */ },
+            .clickable (onClick = onClick),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(secondaryBlue)
     ) {
@@ -296,6 +361,7 @@ private fun IssueCredentialButton() {
         }
     }
 }
+
 
 data class CredentialItem(
     val title: String,
