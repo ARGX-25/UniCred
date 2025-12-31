@@ -259,7 +259,6 @@ private fun LogoutButton() {
     ) {
         Icon(
             painterResource(R.drawable.logout),
-            modifier = Modifier.rotate(90f),
             contentDescription = null,
             tint = red
         )

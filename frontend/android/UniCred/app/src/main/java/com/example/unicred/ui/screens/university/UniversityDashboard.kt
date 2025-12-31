@@ -442,7 +442,7 @@ fun UniversityNavBar(
     ) {
         NavigationBarItem(
             selected = true,
-            onClick = { },
+            onClick = { navController.navigate("university_dashboard")},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.home),
@@ -456,7 +456,7 @@ fun UniversityNavBar(
         )
         NavigationBarItem(
             selected = false,
-            onClick = { },
+            onClick = {navController.navigate("credential_management") },
             icon = {
 
                 Column(
@@ -484,7 +484,7 @@ fun UniversityNavBar(
         )
         NavigationBarItem(
             selected = false,
-            onClick = { },
+            onClick = {navController.navigate("student_directory") },
             icon = {
 
                 Column(
@@ -497,7 +497,7 @@ fun UniversityNavBar(
                         tint = if (currentRoute == "student_directory") secondaryBlue else grey
                     )
                     Text(
-                        text = "Students \nDirectory",
+                        text = "Student \nDirectory",
                         color = Color.White,
                         fontSize = 11.sp,
                         textAlign = TextAlign.Center,
@@ -511,7 +511,7 @@ fun UniversityNavBar(
         )
         NavigationBarItem(
             selected = false,
-            onClick = { },
+            onClick = { navController.navigate("university_settings")},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.settings),

@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.unicred.ui.screens.LoginScreen
+import com.example.unicred.ui.screens.recruiter.CredentialVerification
 import com.example.unicred.ui.screens.recruiter.RecruiterDashboard
 import com.example.unicred.ui.screens.recruiter.RecruiterSettings
 import com.example.unicred.ui.screens.student.ProfileScreen
@@ -90,7 +91,9 @@ private fun UniCredRoot() {
             RecruiterDashboard(navController)
         }
 
-
+        composable("credential_verification"){
+            CredentialVerification(navController)
+        }
 
         composable("recruiter_settings"){
             RecruiterSettings(navController)

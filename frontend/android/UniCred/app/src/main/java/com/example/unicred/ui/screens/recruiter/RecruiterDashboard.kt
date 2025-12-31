@@ -446,7 +446,7 @@ fun RecruiterNavBar(
     ) {
         NavigationBarItem(
             selected = true,
-            onClick = { },
+            onClick = { navController.navigate("recruiter_dashboard")},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.home),
@@ -460,7 +460,7 @@ fun RecruiterNavBar(
         )
         NavigationBarItem(
             selected = false,
-            onClick = { },
+            onClick = {navController.navigate("credential_verification") },
             icon = {
 
                 Column(
@@ -489,7 +489,7 @@ fun RecruiterNavBar(
 
         NavigationBarItem(
             selected = false,
-            onClick = { },
+            onClick = {navController.navigate("recruiter_settings") },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.settings),

@@ -171,70 +171,79 @@ private fun SearchCredentialsSection(
     ){
         Text("Search Students and Credentials", fontSize = 18.sp, color = Color.White)
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(primaryBlue)
-                .border(border = BorderStroke(0.5.dp,grey), shape = RoundedCornerShape(12.dp))
-            , contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxWidth()
         ){
             Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 6.dp, end = 28.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.search),
-                    contentDescription = null,
-                    tint = grey
-                )
-                TextField(
-                    value = query,
-                    onValueChange = onQueryChange,
-                    placeholder = {
-                        Text(
-                            "Search by name, student ID, or program…",
-                            color = grey,
-                            fontSize = 16.sp
-                        )
-                    },
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Box(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(horizontal = 8.dp,vertical = 4.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = Color.White,
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
-                    ),
-                    singleLine = true
-                )
+                        .height(64.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(primaryBlue)
+                        .border(border = BorderStroke(0.5.dp,grey), shape = RoundedCornerShape(12.dp))
+                    , contentAlignment = Alignment.Center
+                ){
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 6.dp, end = 28.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.search),
+                            contentDescription = null,
+                            tint = grey
+                        )
+                        TextField(
+                            value = query,
+                            onValueChange = onQueryChange,
+                            placeholder = {
+                                Text(
+                                    "Search by name, student ID, or program…",
+                                    color = grey,
+                                    fontSize = 16.sp
+                                )
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 8.dp,vertical = 4.dp),
+                            colors = TextFieldDefaults.colors(
+                                focusedContainerColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                disabledContainerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                cursorColor = Color.White,
+                                focusedTextColor = Color.White,
+                                unfocusedTextColor = Color.White
+                            ),
+                            singleLine = true
+                        )
 
+                    }
+
+                }
                 IconButton(
-                    onClick = { /* trigger search */ },
+                    onClick = { /* open filters */ },
                     modifier = Modifier
-                        .size(18.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(secondaryBlue)
+                        .size(64.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(primaryBlue)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.arrow_up),
-                        contentDescription = "Search",
-                        tint = Color.White,
-                        modifier = Modifier.size(22.dp).rotate(90f)
+                        painter = painterResource(R.drawable.filter),
+                        contentDescription = "Filter",
+                        tint = secondaryBlue
                     )
                 }
-
             }
-
         }
+
     }
 
 }
@@ -256,19 +265,7 @@ private fun CredentialSearchAndFilter(
             )
         }
 
-        IconButton(
-            onClick = { /* open filters */ },
-            modifier = Modifier
-                .size(48.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(primaryBlue)
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.filter),
-                contentDescription = "Filter",
-                tint = secondaryBlue
-            )
-        }
+
     }
 }
 
