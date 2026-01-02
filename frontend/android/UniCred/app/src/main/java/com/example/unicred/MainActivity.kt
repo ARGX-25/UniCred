@@ -8,6 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.unicred.models.network.api.RetrofitInstance
+import com.example.unicred.repositories.StudentRepositoryImpl
 import com.example.unicred.ui.screens.LoginScreen
 import com.example.unicred.ui.screens.recruiter.CredentialVerification
 import com.example.unicred.ui.screens.recruiter.RecruiterDashboard
@@ -20,6 +23,8 @@ import com.example.unicred.ui.screens.university.UniversityDashboard
 import com.example.unicred.ui.screens.university.UniversitySettings
 
 import com.example.unicred.ui.theme.UniCredTheme
+import com.example.unicred.viewmodel.StudentDirectoryViewModel
+import com.example.unicred.viewmodel.factory.StudentDirectoryViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +85,19 @@ private fun UniCredRoot() {
         }
 
         composable("student_directory"){
-            StudentDirectory(navController)
+
+            val repository = StudentRepositoryImpl(
+                RetrofitInstance.studentApi
+            )
+
+            val viewModel: StudentDirectoryViewModel = viewModel(
+                factory = StudentDirectoryViewModelFactory(repository)
+            )
+
+            StudentDirectory(
+                navController = navController,
+                viewModel = viewModel
+            )
         }
 
         composable("university_settings"){

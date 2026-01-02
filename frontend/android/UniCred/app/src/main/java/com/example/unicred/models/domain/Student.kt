@@ -2,11 +2,14 @@ package com.example.unicred.models.domain
 
 data class Student(
     val id: Int,
-    val studentId: String,
-    val name: String,
+    val fullName: String,
     val email: String,
+    val studentId: String,
     val program: String,
-    val phone: String?,
+    val phoneNumber: String?,
     val address: String?,
-    val status: String
+    val validId: String,
+    val status: String,
+    val createdAt: String
 )
+

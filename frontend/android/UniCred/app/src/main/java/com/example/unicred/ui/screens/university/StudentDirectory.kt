@@ -27,14 +27,16 @@ import com.example.unicred.ui.screens.PopupDropdownField
 import com.example.unicred.ui.screens.PopupTextField
 import com.example.unicred.ui.screens.UniversityPopup
 import com.example.unicred.ui.theme.*
+import com.example.unicred.viewmodel.StudentDirectoryViewModel
 
 /* ----------------------------- ENTRY POINT ----------------------------- */
 
 @Composable
 fun StudentDirectory(
-    navController: NavController
+    navController: NavController,
+    viewModel: StudentDirectoryViewModel
 ) {
-    var query by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsState()
 
     var showAddStudentPopup by remember { mutableStateOf(false) }
 
@@ -65,21 +67,51 @@ fun StudentDirectory(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+            if (uiState.isLoading) {
+                item {
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+            uiState.errorMessage?.let { error ->
+                item {
+                    Text(
+                        text = error,
+                        color = Color.Red,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+
 
             item { StudentDirectoryHeader() }
 
-            item { StudentStatsGrid() }
+            item { StudentStatsGrid(
+
+            ) }
 
             item {
                 StudentSearchAndFilter(
-                    query = query,
-                    onQueryChange = { query = it }
+                    query = uiState.searchQuery,
+                    onQueryChange = viewModel::onSearchQueryChanged
                 )
             }
 
             item { AddStudentButton(onClick = { showAddStudentPopup = true }) }
 
-            item { StudentsListSection() }
+            item { StudentsListSection(
+                students = uiState.filteredStudents
+            ) }
         }
 
         if (showAddStudentPopup) {
@@ -307,41 +339,24 @@ private fun AddStudentButton(
 
 /* ----------------------------- STUDENT LIST ----------------------------- */
 
-data class Student(
-    val name: String,
-    val email: String,
-    val id: String,
-    val program: String,
-    val status: String
-)
 
 @Composable
-private fun StudentsListSection() {
-    val students = listOf(
-        Student(
-            name = "Debarghaya Mitra",
-            email = "debarghayamitra0@gmail.com",
-            id = "STU008",
-            program = "Computer Science",
-            status = "Active"
-        ),
-        Student(
-            name = "Anna Garcia",
-            email = "anna.garcia@example.edu",
-            id = "STU009",
-            program = "Data Science",
-            status = "Active"
-        )
-    )
-
+private fun StudentsListSection(
+    students: List<com.example.unicred.models.domain.Student>
+) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("Students (${students.size})", fontSize = 18.sp, color = Color.White)
+        Text(
+            "Students (${students.size})",
+            fontSize = 18.sp,
+            color = Color.White
+        )
 
         students.forEach {
             StudentCard(it)
         }
     }
 }
+
 
 @Composable
 private fun StatusChip(
@@ -362,7 +377,7 @@ private fun StatusChip(
 }
 
 @Composable
-private fun StudentCard(student: Student) {
+private fun StudentCard(student: com.example.unicred.models.domain.Student) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
@@ -374,12 +389,12 @@ private fun StudentCard(student: Student) {
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CircleAvatar(student.name)
+                CircleAvatar(student.fullName)
 
                 Spacer(Modifier.width(12.dp))
 
                 Column(Modifier.weight(1f)) {
-                    Text(student.name, color = Color.White)
+                    Text(student.fullName, color = Color.White)
                     Text(student.email, color = grey, fontSize = 12.sp)
                     Text("ID: ${student.id}", color = grey, fontSize = 12.sp)
                     Text(student.program, color = grey, fontSize = 12.sp)

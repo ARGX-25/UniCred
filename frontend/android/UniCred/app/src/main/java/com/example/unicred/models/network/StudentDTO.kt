@@ -30,7 +30,7 @@ data class StudentDTO(
     val email: String,
 
     @SerializedName("valid_id")
-    val validId: Boolean,
+    val validId: String,
 
     @SerializedName("user_status")
     val userStatus: String

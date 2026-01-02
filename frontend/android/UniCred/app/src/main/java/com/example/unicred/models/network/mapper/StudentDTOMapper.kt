@@ -5,15 +5,18 @@ import com.example.unicred.models.network.StudentDTO
 fun StudentDTO.toDomain(): Student {
     return Student(
         id = id,
-        studentId = studentId,
-        name = fullName,
+        fullName = fullName,
         email = email,
+        studentId = studentId,
         program = program,
-        phone = phoneNumber,
+        phoneNumber = phoneNumber,
         address = address,
-        status = userStatus
+        validId = validId,
+        status = userStatus,
+        createdAt = createdAt
     )
 }
+
 
 fun List<StudentDTO>.toDomainList(): List<Student> {
     return map { it.toDomain() }
